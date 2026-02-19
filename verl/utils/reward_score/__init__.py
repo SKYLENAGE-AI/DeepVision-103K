@@ -47,6 +47,8 @@ def default_compute_score(
         res = gsm8k.compute_score(solution_str, ground_truth)
 
     elif data_source in [
+        'math-77k',
+        'visual_logic-26k',
         'mathverse_vision',
         'multimath',
         'multimath-300k',

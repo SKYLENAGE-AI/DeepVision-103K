@@ -1,10 +1,98 @@
+<div align="center">
+
+# 🔭 DeepVision-103K
+
+<div>
+A Visually Diverse, Broad-Coverage, and Verifiable Mathematical Dataset for Multimodal Reasoning
+</div>
+</div>
+
+<div>
+<br>
+
+<div align="center">
+
+[![Data](https://img.shields.io/badge/Data-4d5eff?style=for-the-badge&logo=huggingface&logoColor=ffffff&labelColor)](https://huggingface.co/datasets/ORG/DeepVision-103K)
+[![Github](https://img.shields.io/badge/Code-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/SKYLENAGE-AI/DeepVision-103K)
+<!-- [![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-b31b1b.svg?style=for-the-badge)](https://arxiv.org/abs/xxxx.xxxxx) -->
+
+</div>
+</div>
+
+Training on DeepVision-103K yields **top performance** on both multimodal mathematical reasoning and general multimodal benchmarks:
+
+<div align="center"> <img src="./assets/perf.png" width="100%"/>
+
+<sub>Average Performance on multimodal math and general multimodal benchmarks.</sub> </div>
+
+## 📢 News
+
+- **Feb 16, 2026**: We release **`DeepVision-103K`**, a large-scale, visually diverse, and verifiable multimodal mathematical dataset for advancing multimodal reasoning via RLVR. 
+
+## 📦 Resource
+
+- 🧩 Training data: [`DeepVision-103K`](https://huggingface.co/datasets/skylenage/DeepVision-103K)
+- 💻 Code: [`DeepVision-103K`](https://github.com/SKYLENAGE-AI/DeepVision-103K)
+<!-- - 📄 Paper: [`arXiv:xxxx.xxxxx`](https://arxiv.org/abs/xxxx.xxxxx) -->
+
+## 📝 Overview
+
+**`DeepVision-103K`** is a dataset designed for LMM Reasoning, curated from diverse real-world K12 educational sources. Key features include:
+
+**1. Visual Diversity**: DeepVision-103K covers planar geometry, solid geometry, analytic plots, data charts, schematic diagrams, and real-world items in mathematical contexts. 
+<div align="center"> <img src="./assets/visual_elements.png" width="100%"/>
+<sub>Visual elements in DeepVision-103K</sub> </div>
+
+Within each category, DeepVision offers richer element types than existing open-source datasets.
+<div align="center"> <img src="./assets/ve3.png" width="100%"/>
+<sub>The number of different visual element types across training datasets.</sub> </div>
+
+**2. Broad Coverage**: DeepVision-103K spans  Geometry, Algebra, Probability & Statistics, and Fundamental Mathematical Skills.
+
+<div align="center"> <img src="./assets/domain.png" width="400"/>
+
+<sub>Hierarchical breakdown of mathematical topics covered in DeepVision-103K.</sub> </div>
+
+**3. Rich Data Format**: Each sample contains structured annotations to support various downstream tasks:
+
+<div align="center"> <img src="./assets/overview.png" width="600"/>
+
+<sub>A data sample from DeepVision-103K.</sub> </div>
+
+- **Question & Image**: Problem statement and corresponding image.
+- **Final Answer**: A unique, verifiable answer enabling rule-based reward computation in RLVR.
+- **Pass Rate**: The proportion of correct responses obtained during model rollouts.
+- **Topic**: Hierarchical classification of the mathematical branch.
+- **Knowledge Points**: Specific mathematical concepts, theorems, or techniques required.
+- **Visual Elements**: Geometric or graphical objects depicted in the image.
+
+
+## Curation Pipeline
+A three-stage pipeline transforms diverse but noisy real-world K12 problems into structured and verifiable QA pairs:
+- **Validity Filtering**: Remove problems unsuitable for RL (proof-based, descriptive, multi-answer questions).
+- **Difficulty Filtering**: Calibrate sample difficulty via model rollout pass rates.
+- **Query Correctness Verification**: Validate image-question pairs and answers using Gemini-3-Flash.
+
+<div align="center"> <img src="./assets/pipeline.png" width="600"/>
+
+<sub>Curation pipeline for mathematical data in DeepVision-103K.</sub> </div>
+
+## 📊 Main Results
+Training on DeepVision-103K yields **top performance** on both multimodal mathematical reasoning and general multimodal benchmarks:
+<div align="center"> <img src="./assets/perf.png" width="100%"/>
+<sub>Average Performance on multimodal math and general multimodal benchmarks.</sub> </div>
+<div align="center"> <img src="./assets/bench_results.png" width="600"/>
+
+<sub>Specific Performance on multimodal math and general multimodal benchmarks.</sub> </div>
+
+
 ## DeepVision-103k Training & Evaluation Toolkit
 
-This repository provides a complete pipeline for DeepVision-103k. We use [GSPO](https://arxiv.org/abs/2507.18071) for training and [vllm](https://github.com/vllm-project/vllm) for async batch evaluation. The training code is built on top of [verl](https://github.com/volcengine/verl). We use [swanlab](https://github.com/SwanHubX/SwanLab) for experiment tracking.
+We use [GSPO](https://arxiv.org/abs/2507.18071) for training and [vllm](https://github.com/vllm-project/vllm) for async batch evaluation. The training code is built on top of [verl](https://github.com/volcengine/verl). We use [swanlab](https://github.com/SwanHubX/SwanLab) for experiment tracking.
 
----
 
-### Project Structure
+
+<!-- ### Code Structure
 
 ```
 .
@@ -19,9 +107,8 @@ This repository provides a complete pipeline for DeepVision-103k. We use [GSPO](
 ├── setup.py
 ├── pyproject.toml
 └── requirements.txt
-```
+``` -->
 
----
 ### Installation
 #### Recommended Environment
 We recommend the following environment configuration:
@@ -33,7 +120,7 @@ We recommend the following environment configuration:
 #### Setup Steps
 ```bash
 # Clone the repo
-git clone <repo_url> && cd deepvision-103k
+git clone https://github.com/SKYLENAGE-AI/DeepVision-103K && cd DeepVision-103K
 
 # Install mathverify for rule-based verification
 pip install mathverify
@@ -74,9 +161,6 @@ Two training templates are provided under `train_scripts/`. Both use the GSPO al
 bash train_scripts/train_single_node_template.sh
 ```
 
-- Uses `python -m verl.trainer.my_main_dapo` directly
-- Set `trainer.n_gpus_per_node` and `trainer.nnodes` accordingly
-- Logs are saved to `$CKPTS_DIR/train.log`
 
 #### Multi-Node Training (Ray cluster across multiple machines)
 
@@ -86,68 +170,11 @@ bash train_scripts/train_single_node_template.sh
 bash train_scripts/train_multi_node_template.sh
 ```
 
-- **Rank 0** starts the Ray head node and submits the training job
-- **Worker nodes** automatically join the Ray cluster via a shared IP file
-- Additional features vs. single-node:
-  - Environment auto-setup (pip installs, shared memory resize)
-  - Separate validation inference parameters (`VAL_TEMPERATURE`, `VAL_TOP_P`)
-  - Automatic MASTER_ADDR discovery across nodes
+### Evaluation 
 
-#### Key Hyperparameters
+The evaluation pipeline under `eval_scripts/` provides inference and evaluation scripts.
 
-| Parameter | Default | Description |
-|---|---|---|
-| `LR` | `1e-6` | Learning rate |
-| `KL_COEF` | `0.001` | KL divergence loss coefficient |
-| `CLIP_RATIO_LOW/HIGH` | `0.0003/0.0004` | PPO clipping range |
-| `N_ROLL` | 8-16 | Number of rollout samples per prompt |
-| `TEMPERATURE` | `1.0` | Rollout sampling temperature |
-| `MAX_PROMPT_LENGTH` | `2048` | Maximum prompt token length |
-| `MAX_RESPONSE_LENGTH` | `16384` | Maximum response token length |
-| `enable_filter_groups` | `true` | Filter rollout groups by accuracy |
-| `loss_mode` | `gspo` | Loss function (gspo) |
-| `LOSS_AGG_MODE` | `seq-mean-token-mean` | Loss aggregation mode |
-
-#### GPU Setting Presets
-
-| GPUs | GEN_BATCH | TRAIN_BATCH | MINI_BATCH | MICRO_BATCH | N_ROLL |
-|------|-----------|-------------|------------|-------------|--------|
-| 8    | 128       | 64          | 16         | 8           | 16      |
-| 16   | 256       | 128         | 32         | 16          | 16     |
-| 32   | 512       | 256         | 64         | 32          | 16     |
-| 64   | 1024      | 512         | 128        | 64          | 16     |
-
-
-### Experiment Tracking
-
-Both training and evaluation support [SwanLab](https://swanlab.cn/) for experiment tracking. Set the following environment variables:
-
-```bash
-export SWANLAB_API_KEY=your_api_key
-export SWANLAB_LOG_DIR=./swanlab_logs
-export SWANLAB_MODE=cloud   # or "local" for offline
-```
-
-
----
-
-### Evaluation / Inference
-
-The evaluation pipeline under `eval_scripts/` provides a fully automated workflow:
-**launch vLLM servers -> run async inference -> save results -> shutdown servers**.
-
-#### Architecture
-
-```
-caller.sh  ->  caller_async.py (orchestrator)  ->  infer-v6.py (async client)
-                    |                                    |
-                    |-- Launches N vLLM instances         |-- Continuous batching
-                    |-- Waits for readiness               |-- Multi-endpoint load balancing
-                    |-- Dispatches inference               |-- Checkpoint/resume support
-                    +-- Graceful shutdown                  +-- Multi-process data preloading
-```
-
-#### Quick Start
+#### Inference
 
 1. **Fill in placeholders** in `caller.sh`:
 
@@ -173,63 +200,6 @@ cd eval_scripts
 bash caller.sh
 ```
 
-#### Key Arguments
-
-| Argument | Default | Description |
-|---|---|---|
-| `--model` | (required) | Path to the model directory |
-| `--input` | (required) | Input JSONL file |
-| `--output` | (required) | Output JSONL file |
-| `--hyperparam` | `qwen_ins` | Preset profile: `qwen_ins`, `qwen_think`, `mimo`, `greedy` |
-| `--gpu-devices` | `0,1,2,3` | Comma-separated GPU IDs |
-| `--tensor-parallel-size` | `4` | Tensor parallel size (TP) |
-| `--data-parallel-size` | `1` | Data parallel size (DP), launches multiple vLLM instances |
-| `--concurrent-per-endpoint` | `64` | Async concurrency per vLLM instance |
-| `--n` | `1` | Number of return sequences per prompt |
-| `--max-tokens` | `16384` | Max tokens to generate |
-| `--prompt-field` | auto-detect | Field name(s) for prompt in input data |
-| `--image-field` | auto-detect | Field name(s) for image paths |
-| `--prompt-file` | (none) | Path to a prompt prefix/template file |
-| `--max-retry-rounds` | `5` | Retry rounds for failed requests |
-
-#### Parallelism Configuration
-
-Total GPUs = `tensor-parallel-size` x `data-parallel-size`
-
-| Setup | TP | DP | Instances | GPUs/Instance |
-|-------|----|----|-----------|---------------|
-| 8 GPU, max throughput | 1 | 8 | 8 | 1 |
-| 8 GPU, large model | 4 | 2 | 2 | 4 |
-| 8 GPU, very large model | 8 | 1 | 1 | 8 |
-
-#### Concurrency Guidelines
-
-| Output Length | Recommended Concurrency/Endpoint |
-|---|---|
-| Short (< 256 tokens) | 128-256 |
-| Medium (256-1024) | 64-128 |
-| Long (> 1024 tokens) | 32-64 |
-| VLM with images | 32-64 |
-
-#### Input Data Format
-
-The input file should be in JSONL format. The prompt field is auto-detected in this order:
-
-`messages` > `prompt` > `question` > `text` > `problem` > `query` > `input`
-
-You can override this with `--prompt-field your_field_name`.
-
-#### Hyperparameter Presets
-
-| Preset | Temperature | Top-P | Top-K | Other |
-|--------|-------------|-------|-------|-------|
-| `qwen_ins` | 0.7 | 0.8 | 20 | repetition_penalty=1.0, presence_penalty=1.5 |
-| `qwen_think` | 1.0 | 0.95 | 20 | repetition_penalty=1.0 |
-| `mimo` | 0.3 | 0.95 | - | - |
-| `greedy` | 0.01 | - | - | - |
-
----
-
 ### Post-Inference Evaluation
 
 After inference is complete, use the evaluation tools under `eval_scripts/evaluation/` to score and analyze results.
@@ -248,13 +218,6 @@ This will:
 - Save a detailed evaluation summary to `your_output_evaluation.json`
 - Export all incorrect cases to `your_output_mathverify_error.jsonl`
 
-**Optional flags:**
-
-| Flag                      | Description                            |
-| ------------------------- | -------------------------------------- |
-| `-o /path/to/output.json` | Custom path for the evaluation summary |
-| `--no-samples`            | Suppress sample prediction display     |
-| `--no-export-errors`      | Skip exporting error cases             |
 
 #### Step 2: GPT-5-mini Re-Judge on Error Cases
 
@@ -272,4 +235,16 @@ Call GPT-5-mini with this prompt. The model will reply with exactly one word: **
 
 Cases marked **"Correct"** by GPT-5-mini are false negatives from math-verify and should be added back to the correct count for the final accuracy.
 
-In our work, we roll 16 for each test query then cacululate the avg accuracy as pass@1 accuracy.
+
+## 📖 Citation
+
+Our paper will be released soon.
+
+## 🙏 Acknowledgements
+
+This work builds upon the following resources:
+
+- **[MM-MathInstruct-3M](https://huggingface.co/datasets/MathLLMs/MM-MathInstruct)**: Large-scale multimodal math instruction data from real educational contexts.
+- **[MultiMath-300K](https://huggingface.co/datasets/pengshuai-rin/multimath-300k)**: Multimodal mathematical dataset from real educational contexts.
+- **[Zebra-CoT](https://huggingface.co/datasets/multimodal-reasoning-lab/Zebra-CoT)**: Visual logic reasoning problems.
+- **[GameQA](https://huggingface.co/datasets/OpenMOSS-Team/GameQA-140K)**: Game-based visual reasoning tasks.
