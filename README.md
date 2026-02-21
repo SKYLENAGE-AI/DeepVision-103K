@@ -1,5 +1,3 @@
-<div align="center">
-
 # 🔭 DeepVision-103K
 
 <div>
@@ -12,9 +10,9 @@ A Visually Diverse, Broad-Coverage, and Verifiable Mathematical Dataset for Mult
 
 <div align="center">
 
-[![Data](https://img.shields.io/badge/Data-4d5eff?style=for-the-badge&logo=huggingface&logoColor=ffffff&labelColor)](https://huggingface.co/datasets/ORG/DeepVision-103K)
+[![Data](https://img.shields.io/badge/Data-4d5eff?style=for-the-badge&logo=huggingface&logoColor=ffffff&labelColor)](https://huggingface.co/datasets/skylenage/DeepVision-103K)
 [![Github](https://img.shields.io/badge/Code-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/SKYLENAGE-AI/DeepVision-103K)
-<!-- [![arXiv](https://img.shields.io/badge/arXiv-xxxx.xxxxx-b31b1b.svg?style=for-the-badge)](https://arxiv.org/abs/xxxx.xxxxx) -->
+[![Paper](https://img.shields.io/badge/Paper-2602.16742-b31b1b.svg?style=for-the-badge)](https://huggingface.co/papers/2602.16742)
 
 </div>
 </div>
@@ -25,6 +23,19 @@ Training on DeepVision-103K yields **top performance** on both multimodal mathem
 
 <sub>Average Performance on multimodal math and general multimodal benchmarks.</sub> </div>
 
+Training on DeepVision-103K elicits more efficient reasoning.
+
+| Benchmark   | Qwen3-VL-8B-Instruct (Acc / Tokens) | Qwen3-VL-8B-DeepVision (Acc / Tokens) | Qwen3-VL-8B-Thinking (Acc / Tokens) |
+| ----------- | ----------------------------------- | ------------------------------------- | ----------------------------------- |
+| WeMath      | 79.36 / 1428                        | 85.11 / 2010                          | 84.54 / 3754                        |
+| MathVision  | 51.44 / 4288                        | 55.49 / 5738                          | 57.89 / 8970                        |
+| MathVerse   | 67.38 / 1572                        | 72.46 / 2714                          | 72.84 / 4665                        |
+| LogicVista  | 61.16 / 1769                        | 64.73 / 2716                          | 64.73 / 6115                        |
+| MMMU_val    | 67.66 / 2099                        | 71.33 / 2758                          | 69.33 / 5082                        |
+| MMMU_Pro    | 67.69 / 2170                        | 70.29 / 2895                          | 70.29 / 5037                        |
+| M³CoT       | 70.83 / 1029                        | 71.61 / 1294                          | 71.31 / 2761                        |
+| **Average** | 66.50 / 2333                        | **70.15 / 3173**                      | 70.13 / 4995                        |
+
 ## 📢 News
 
 - **Feb 16, 2026**: We release **`DeepVision-103K`**, a large-scale, visually diverse, and verifiable multimodal mathematical dataset for advancing multimodal reasoning via RLVR. 
@@ -33,7 +44,7 @@ Training on DeepVision-103K yields **top performance** on both multimodal mathem
 
 - 🧩 Training data: [`DeepVision-103K`](https://huggingface.co/datasets/skylenage/DeepVision-103K)
 - 💻 Code: [`DeepVision-103K`](https://github.com/SKYLENAGE-AI/DeepVision-103K)
-<!-- - 📄 Paper: [`arXiv:xxxx.xxxxx`](https://arxiv.org/abs/xxxx.xxxxx) -->
+- 📄 Paper: [DeepVision-103K: A Visually Diverse, Broad-Coverage, and Verifiable Mathematical Dataset for Multimodal Reasoning](https://huggingface.co/papers/2602.16742)
 
 ## 📝 Overview
 
@@ -89,25 +100,6 @@ Training on DeepVision-103K yields **top performance** on both multimodal mathem
 ## DeepVision-103k Training & Evaluation Toolkit
 
 We use [GSPO](https://arxiv.org/abs/2507.18071) for training and [vllm](https://github.com/vllm-project/vllm) for async batch evaluation. The training code is built on top of [verl](https://github.com/volcengine/verl). We use [swanlab](https://github.com/SwanHubX/SwanLab) for experiment tracking.
-
-
-
-<!-- ### Code Structure
-
-```
-.
-├── verl/                    # Core verl library (install via pip install -e .)
-├── train_scripts/           # Training launch scripts
-│   ├── train_single_node_template.sh   # Single-node training
-│   └── train_multi_node_template.sh    # Multi-node training (Ray cluster)
-├── eval_scripts/            # Evaluation / inference scripts
-│   ├── caller_async.py      # Orchestrator: launches vLLM servers + dispatches inference
-│   ├── infer-v6.py          # Async continuous-batching inference client
-│   └── caller.sh            # Example launch script
-├── setup.py
-├── pyproject.toml
-└── requirements.txt
-``` -->
 
 ### Installation
 #### Recommended Environment
@@ -212,33 +204,25 @@ Run the math-verify judge to compute accuracy and automatically export error cas
 python eval_scripts/evaluation/mathverify_judge.py -i /path/to/your_output.jsonl
 ```
 
-This will:
-
-- Print overall accuracy statistics (correct / wrong / error counts)
-- Save a detailed evaluation summary to `your_output_evaluation.json`
-- Export all incorrect cases to `your_output_mathverify_error.jsonl`
-
-
 #### Step 2: GPT-5-mini Re-Judge on Error Cases
 
 For the exported error cases (`*_mathverify_error.jsonl`), use GPT-5-mini as a secondary judge to catch false negatives from rule-based matching.
 
-The judge prompt template is defined in `eval_scripts/evaluation/gpt5-mini-judge_prompt.md`. For each error case, construct the prompt by filling in the template:
-
-```
-PlainTextQuestion: {question}
-Standard Answer:{gdt}
-Model Answer:{box_answer}   # extracted \boxed{} content
-```
-
-Call GPT-5-mini with this prompt. The model will reply with exactly one word: **"Correct"** or **"Incorrect"**.
-
-Cases marked **"Correct"** by GPT-5-mini are false negatives from math-verify and should be added back to the correct count for the final accuracy.
-
+The judge prompt template is defined in `eval_scripts/evaluation/gpt5-mini-judge_prompt.md`. 
 
 ## 📖 Citation
 
-Our paper will be released soon.
+```bibtex
+@misc{sun2026deepvision103kvisuallydiversebroadcoverage,
+      title={DeepVision-103K: A Visually Diverse, Broad-Coverage, and Verifiable Mathematical Dataset for Multimodal Reasoning}, 
+      author={Haoxiang Sun and Lizhen Xu and Bing Zhao and Wotao Yin and Wei Wang and Boyu Yang and Rui Wang and Hu Wei},
+      year={2026},
+      eprint={2602.16742},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2602.16742}, 
+}
+```
 
 ## 🙏 Acknowledgements
 
